@@ -53,6 +53,7 @@ public class MoveToAction extends BaseAction {
         MinionMoveComponent moveComponent = actor.getComponent(MinionMoveComponent.class);
 
         if (moveComponent.target == null) {
+            sendZeroInput(actor);
             return BehaviorState.FAILURE;
         }
         if (moveComponent.type == MinionMoveComponent.Type.DIRECT) {
@@ -98,6 +99,12 @@ public class MoveToAction extends BaseAction {
 
 
         return reachedTarget;
+    }
+    private void sendZeroInput(Actor actor){
+        Vector3f drive = new Vector3f();
+        drive.set(0, 0, 0);
+        CharacterMoveInputEvent wantedInput = new CharacterMoveInputEvent(0, 0, 0f, drive, false, false, false, (long) (actor.getDelta() * 1000));
+        actor.getEntity().send(wantedInput);
     }
 
 }
